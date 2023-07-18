@@ -299,7 +299,7 @@ public class SimpleGUIClient extends JFrame {
 		roomLabel = new JLabel("방제목 : ");
 		roomLabel.setBounds(45, 10, 244, 19);
 		chattingRoomPanel.add(roomLabel);
-//		roomLabel.setEnabled(false);
+//		roomLabel.setEnabled(false); // 활성화 시키면 setForeground를 사용하지 못함
 		roomLabel.setBorder(BorderFactory.createEmptyBorder());
 		roomLabel.setFont(new Font("HY엽서M", Font.BOLD, 15));
 		roomLabel.setHorizontalAlignment(SwingConstants.LEFT);

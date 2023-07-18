@@ -24,11 +24,14 @@ public class ClientReceiver extends Thread {
 
 		while(true) {
 			try {
+				// 서버로부터의 입력을 받기 위해 BufferedReader를 생성
 				BufferedReader bufferedReader = 
 						new BufferedReader(new InputStreamReader
 								(SimpleGUIClient.getInstance().getSocket().getInputStream()));
+				// 서버로부터의 메시지를 읽어옴
 				String requestBody = bufferedReader.readLine();
 				
+				// 읽어온 메시지를 처리하는 메서드 호출
 				requestController(requestBody);
 				
 			} catch (IOException e) {
@@ -37,10 +40,13 @@ public class ClientReceiver extends Thread {
 		}
 	}
 	
+	// 서버로부터 받은 메시지의 종류에 따라 처리하는 메서드를 선택하는 컨트롤러
 	private void requestController(String requestBody) {
-
+		
+		// JSON 형식으로 받은 메시지에서 리소스 정보를 추출
 		String resource = gson.fromJson(requestBody, RequestBodyDto.class).getResource();
 		
+		// 리소스에 따라 적절한 처리 메서드 호출
 		switch(resource) {
 			case "updateRoomList":
 				updateRoomList(requestBody);
@@ -64,6 +70,8 @@ public class ClientReceiver extends Thread {
                 		
 		}
 	}
+	
+	// <처리 메서드 ↓>
 	
 	//귓속말
 	private void receiveWhisperMessage(String requestBody) {
@@ -96,15 +104,25 @@ public class ClientReceiver extends Thread {
 	private void updateUserList(String requestBody) {
 	    List<String> usernameList = (List<String>) gson.fromJson(requestBody, RequestBodyDto.class).getBody();
 	    
-	    usernameList.set(0, usernameList.get(0) + "( 방장 )");	    
+	    // 방장 표시 추가
+	    usernameList.set(0, usernameList.get(0) + "( 방장 )");
+	    
+	    // 메시지 입력 필드를 수정 가능하도록 설정하고 포커스 요청
 	    SimpleGUIClient.getInstance().getMessageTextField().setEditable(true);
 	    SimpleGUIClient.getInstance().getMessageTextField().requestFocus();
+	    
+	    // 유저 리스트 갱신
 	    SimpleGUIClient.getInstance().getUserListModel().clear();
 	    SimpleGUIClient.getInstance().getUserListModel().addAll(usernameList);
+	    
+	   
+	    
 	    }
 	
 	//채팅방 삭제
 	private void chattingTextClear(String requestBody) {
+		
+		// 채팅창을 초기화
 			SimpleGUIClient.getInstance().getChattingTextArea().setText("");
 	}
 }
